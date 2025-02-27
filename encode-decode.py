@@ -1,3 +1,14 @@
+import re
+
+def validate_input(message, key):
+    if not re.fullmatch(r"[a-z ]+", message):
+        raise ValueError("Az üzenet csak az angol ábécé kisbetűit és szóközt tartalmazhat!")
+    if not re.fullmatch(r"[a-z ]+", key):
+        raise ValueError("A kulcs csak az angol ábécé kisbetűit és szóközt tartalmazhat!")
+    
+    if len(key) < len(message):
+        raise ValueError("A kulcsnak legalább akkorának kell lennie, mint az üzenet!")
+
 def encode_message(message, key):
     alphabet = 'abcdefghijklmnopqrstuvwxyz '
     char_to_code = {char: idx for idx, char in enumerate(alphabet)}
@@ -26,11 +37,16 @@ def decode_message(encoded_message, key):
 
     return decoded_message
 
-# Példa használat:
-message = "helloworld"
-key = "abcdefgijkl"
+message = input("Adja meg az üzenetet: ").strip()
+key = input("Adja meg a kulcsot: ").strip()
+
+try:
+    validate_input(message, key)
+except ValueError as e:
+    print(f"Hiba: {e}")
+
 encoded_message = encode_message(message, key)
-print("Encoded:", encoded_message)  # "hfnosauzun"
+print("Rejtjelezett üzenet:", encoded_message)
 
 decoded_message = decode_message(encoded_message, key)
-print("Decoded:", decoded_message)  # "helloworld"
+print("Visszafejtett üzenet:", decoded_message)
